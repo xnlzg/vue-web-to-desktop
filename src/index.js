@@ -16,17 +16,13 @@ import { platform, storage } from './utils.js';
  */
 const defaultOptions = {
   // 延迟显示时间 (毫秒)
-  delay: 3000,
+  delay: 500,
   // 主题色
   themeColor: '#4f46e5',
   // 忽略后静默天数
   dismissExpire: 7,
   // 是否在控制台输出日志
   debug: false,
-  // 安装模式: 'prompt' (弹窗提示) | 'auto' (自动安装)
-  installMode: 'prompt',
-  // 自动安装延迟时间 (毫秒)，仅在 installMode 为 'auto' 时生效
-  autoInstallDelay: 1000,
   // 自定义国际化文案
   customI18n: null,
   // 自定义 Manifest 配置
@@ -34,9 +30,7 @@ const defaultOptions = {
   // 回调函数
   onInstalled: null,
   onDismiss: null,
-  onBeforeShow: null,
-  // 自动安装前回调，返回 false 可阻止自动安装
-  onBeforeAutoInstall: null
+  onBeforeShow: null
 };
 
 /**
@@ -139,17 +133,8 @@ class WebToDesktop {
     // 保存事件
     this.deferredPrompt = event;
 
-    // 根据安装模式选择行为
-    if (this.options.installMode === 'auto') {
-      this.log('自动安装模式已启用');
-      // 自动模式使用 autoInstallDelay
-      setTimeout(() => {
-        this.showPrompt();
-      }, this.options.autoInstallDelay);
-    } else {
-      // 手动模式使用 delay
-      this.scheduleShow();
-    }
+    // 延迟显示安装提示弹窗
+    this.scheduleShow();
   }
 
   /**
@@ -200,7 +185,6 @@ class WebToDesktop {
     this.promptUI = new InstallPromptUI({
       themeColor: this.options.themeColor,
       customI18n: this.options.customI18n,
-      installMode: this.options.installMode,
       onInstalled: this.options.onInstalled,
       onDismiss: this.options.onDismiss
     });
@@ -212,7 +196,7 @@ class WebToDesktop {
 
     // 显示
     this.promptUI.show();
-    this.log('安装提示已显示，模式:', this.options.installMode);
+    this.log('安装提示已显示');
   }
 
   /**
@@ -287,7 +271,7 @@ class WebToDesktop {
   }
 
   /**
-   * 手动显示安装提示（忽略延迟和静默期，强制使用 prompt 模式）
+   * 手动显示安装提示（忽略延迟和静默期）
    */
   showPromptManual() {
     if (platform.isStandalone()) {
@@ -301,11 +285,10 @@ class WebToDesktop {
       this.promptUI = null;
     }
 
-    // 创建 UI（强制使用 prompt 模式，这样用户可以点击按钮）
+    // 创建 UI
     this.promptUI = new InstallPromptUI({
       themeColor: this.options.themeColor,
       customI18n: this.options.customI18n,
-      installMode: 'prompt',  // 手动触发时强制使用 prompt 模式
       onInstalled: this.options.onInstalled,
       onDismiss: this.options.onDismiss
     });

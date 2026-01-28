@@ -46,7 +46,7 @@ declare module 'vue-web-to-desktop' {
   }
 
   export interface WebToDesktopOptions {
-    /** 延迟显示时间 (毫秒)，默认 3000 */
+    /** 延迟显示时间 (毫秒)，默认 500 */
     delay?: number;
     /** 主题色，默认 '#4f46e5' */
     themeColor?: string;
@@ -54,10 +54,6 @@ declare module 'vue-web-to-desktop' {
     dismissExpire?: number;
     /** 是否在控制台输出日志，默认 false */
     debug?: boolean;
-    /** 安装模式: 'prompt' (弹窗提示) | 'auto' (自动安装)，默认 'prompt' */
-    installMode?: 'prompt' | 'auto';
-    /** 自动安装延迟时间 (毫秒)，仅在 installMode 为 'auto' 时生效，默认 1000 */
-    autoInstallDelay?: number;
     /** 自定义国际化文案 */
     customI18n?: CustomI18n;
     /** 自定义 Manifest 配置 */
@@ -68,8 +64,6 @@ declare module 'vue-web-to-desktop' {
     onDismiss?: () => void;
     /** 显示前回调，返回 false 可阻止显示 */
     onBeforeShow?: () => boolean | void;
-    /** 自动安装前回调，返回 false 可阻止自动安装并改为显示提示弹窗 */
-    onBeforeAutoInstall?: () => boolean | void;
   }
 
   export interface PlatformInfo {

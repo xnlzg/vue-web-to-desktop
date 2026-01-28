@@ -182,19 +182,6 @@
         </div>
       </div>
 
-      <div class="mode-selector"
-        style="margin-bottom: 20px; padding: 16px; background: rgba(255,255,255,0.1); border-radius: 12px;">
-        <div style="margin-bottom: 10px; font-weight: 600;">安装模式：</div>
-        <label style="margin-right: 20px; cursor: pointer;">
-          <input type="radio" name="mode" value="prompt" checked style="margin-right: 6px;">
-          弹窗提示模式 (prompt)
-        </label>
-        <label style="cursor: pointer;">
-          <input type="radio" name="mode" value="auto" style="margin-right: 6px;">
-          自动安装模式 (auto)
-        </label>
-      </div>
-
       <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
         <button class="btn" id="installBtn">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -220,10 +207,6 @@
         <div class="status-item">
           <span class="status-dot" id="installStatus"></span>
           <span id="installText">检测安装状态...</span>
-        </div>
-        <div class="status-item">
-          <span class="status-dot" id="modeStatus" style="background: #4f46e5;"></span>
-          <span id="modeText">当前模式: prompt (弹窗提示)</span>
         </div>
       </div>
 
@@ -268,28 +251,14 @@
         installStatus.style.background = '#f59e0b';
         installText.textContent = '○ 尚未安装';
       }
-
-      // 模式状态
-      modeText.textContent = currentMode === 'prompt'
-        ? '当前模式: prompt (弹窗提示)'
-        : '当前模式: auto (自动安装)';
     }
 
     // 初始化插件
-    function initPlugin(mode) {
-      // 如果已有实例，先销毁
-      if (wtd) {
-        wtd.destroy();
-      }
-
-      currentMode = mode;
-
+    function initPlugin() {
       wtd = new WebToDesktop({
         delay: 2000,
         themeColor: '#4f46e5',
         debug: true,
-        installMode: mode,
-        autoInstallDelay: 1000,
         onInstalled: () => {
           console.log('🎉 安装成功！');
           updateStatus();
@@ -301,33 +270,13 @@
 
       wtd.init();
       updateStatus();
-      console.log(`📌 插件已初始化，模式: ${mode}`);
+      console.log('📌 插件已初始化');
     }
 
     // 初始化
-    initPlugin('prompt');
+    initPlugin();
 
-    // 模式切换 - 需要刷新页面才能生效
-    document.querySelectorAll('input[name="mode"]').forEach(radio => {
-      radio.addEventListener('change', (e) => {
-        const mode = e.target.value;
-        console.log(`🔄 切换到 ${mode} 模式，刷新页面...`);
-        // 保存选择到 URL 参数
-        const url = new URL(window.location.href);
-        url.searchParams.set('mode', mode);
-        window.location.href = url.toString();
-      });
-    });
-
-    // 从 URL 参数读取模式
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlMode = urlParams.get('mode');
-    if (urlMode === 'auto') {
-      document.querySelector('input[value="auto"]').checked = true;
-      initPlugin('auto');
-    }
-
-    // 手动安装按钮 - 使用插件的 install 方法
+    // 手动安装按钮
     document.getElementById('installBtn').addEventListener('click', async () => {
       if (wtd.canInstall()) {
         const result = await wtd.install();
@@ -335,12 +284,11 @@
           updateStatus();
         }
       } else {
-        // 没有可用的安装事件，显示手动提示
         wtd.showPromptManual();
       }
     });
 
-    // 显示提示按钮 - 手动显示右下角弹窗
+    // 显示提示按钮
     document.getElementById('showPromptBtn').addEventListener('click', () => {
       console.log('📢 手动显示提示弹窗');
       wtd.showPromptManual();

@@ -29,7 +29,6 @@ export class InstallPromptUI {
     this.deferredPrompt = null;
     this.texts = getI18nTexts(options.customI18n);
     this.isIOS = platform.isIOSSafari();
-    this.isAutoMode = options.installMode === 'auto';
 
     // 绑定方法
     this.handleInstall = this.handleInstall.bind(this);
@@ -58,8 +57,6 @@ export class InstallPromptUI {
 
     if (this.isIOS) {
       this.container.innerHTML = this.renderIOSContent();
-    } else if (this.isAutoMode) {
-      this.container.innerHTML = this.renderAutoInstallContent();
     } else {
       this.container.innerHTML = this.renderDefaultContent();
     }
@@ -68,15 +65,10 @@ export class InstallPromptUI {
 
     // 绑定事件
     this.bindEvents();
-
-    // 如果是自动模式，立即触发安装
-    if (this.isAutoMode && !this.isIOS) {
-      this.triggerAutoInstall();
-    }
   }
 
   /**
-   * 渲染默认内容 (支持一键安装的平台 - 手动模式)
+   * 渲染默认内容
    */
   renderDefaultContent() {
     const icon = getPageIcon();
@@ -99,30 +91,6 @@ export class InstallPromptUI {
             ${icons.download}
             ${this.texts.installButton}
           </button>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
-   * 渲染自动安装内容 (显示安装中状态)
-   */
-  renderAutoInstallContent() {
-    const icon = getPageIcon();
-    const appName = getPageTitle();
-
-    return `
-      <div class="vtd-card">
-        <div class="vtd-header">
-          <img class="vtd-icon" src="${icon}" alt="${appName}" onerror="this.style.display='none'">
-          <div class="vtd-title-wrap">
-            <h3 class="vtd-title">${appName}</h3>
-            <p class="vtd-app-name">${this.texts.installing}</p>
-          </div>
-        </div>
-        <div class="vtd-installing">
-          <div class="vtd-installing-spinner">${icons.loading}</div>
-          <p class="vtd-installing-text">${this.texts.installingDescription}</p>
         </div>
       </div>
     `;

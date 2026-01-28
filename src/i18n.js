@@ -80,13 +80,15 @@ export const defaultI18n = {
  * @param {Object} customI18n 自定义文案
  * @returns {Object} 当前语言的文案
  */
-export function getI18nTexts(customI18n = {}) {
+export function getI18nTexts(customI18n) {
   const mergedI18n = { ...defaultI18n };
 
-  // 合并自定义文案
-  Object.keys(customI18n).forEach(lang => {
-    mergedI18n[lang] = { ...mergedI18n[lang], ...customI18n[lang] };
-  });
+  // 合并自定义文案（确保 customI18n 是对象）
+  if (customI18n && typeof customI18n === 'object') {
+    Object.keys(customI18n).forEach(lang => {
+      mergedI18n[lang] = { ...mergedI18n[lang], ...customI18n[lang] };
+    });
+  }
 
   // 获取浏览器语言
   const browserLang = navigator.language || navigator.userLanguage || 'en';

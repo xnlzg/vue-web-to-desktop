@@ -198,60 +198,15 @@ export default {
 
 | 选项 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `delay` | `number` | `3000` | 延迟显示安装提示的时间（毫秒） |
+| `delay` | `number` | `500` | 延迟显示安装提示的时间（毫秒） |
 | `themeColor` | `string` | `'#4f46e5'` | 主题色，用于安装按钮和提示框（十六进制格式） |
 | `dismissExpire` | `number` | `7` | 用户点击"暂不安装"后的静默天数 |
 | `debug` | `boolean` | `false` | 是否在控制台输出调试日志 |
-| `installMode` | `string` | `'prompt'` | 安装模式: `'prompt'` (弹窗提示) 或 `'auto'` (自动安装) |
-| `autoInstallDelay` | `number` | `1000` | 自动安装延迟时间（毫秒），仅在 `installMode` 为 `'auto'` 时生效 |
 | `customI18n` | `object` | `null` | 自定义国际化文案（见下文） |
 | `manifestOptions` | `object` | `null` | 自定义 PWA Manifest 配置（见下文） |
 | `onInstalled` | `function` | `null` | 安装成功后的回调函数 |
 | `onDismiss` | `function` | `null` | 用户点击"暂不安装"后的回调函数 |
 | `onBeforeShow` | `function` | `null` | 显示提示前的回调函数，返回 `false` 可阻止显示 |
-| `onBeforeAutoInstall` | `function` | `null` | 自动安装前的回调函数，返回 `false` 可阻止自动安装并改为显示弹窗 |
-
-### 安装模式说明
-
-插件支持两种安装模式，**两种模式都会在右下角弹出提示窗口**：
-
-#### 1. 弹窗提示模式 (`prompt`) - 默认
-
-打开网站后，在右下角自动弹出精美的安装提示弹窗：
-- 弹窗显示应用图标、名称和安装说明
-- 用户需要点击**"立即安装"按钮**后才触发浏览器的安装确认
-
-```javascript
-app.use(WebToDesktop, {
-  installMode: 'prompt',  // 默认值，可不填
-  delay: 3000             // 延迟 3 秒后弹出
-});
-```
-
-#### 2. 自动安装模式 (`auto`)
-
-打开网站后，在右下角同样弹出提示弹窗：
-- 弹窗显示**"安装中..."状态**和加载动画
-- **无需用户点击按钮**，自动触发浏览器的安装确认
-- 用户在浏览器弹窗中确认后完成安装
-- 安装完成后弹窗自动消失
-
-```javascript
-app.use(WebToDesktop, {
-  installMode: 'auto',     // 自动安装模式
-  autoInstallDelay: 1000   // 延迟 1 秒后显示并自动触发
-});
-```
-
-#### 两种模式对比
-
-| 特性 | 弹窗提示模式 (`prompt`) | 自动安装模式 (`auto`) |
-|------|------------------------|----------------------|
-| 右下角弹窗 | ✅ 显示 | ✅ 显示 |
-| 安装按钮 | ✅ 有，需用户点击 | ❌ 无，自动触发 |
-| 弹窗内容 | 安装说明 + 按钮 | "安装中..." + 加载动画 |
-| 用户操作 | 点击按钮 → 确认安装 | 直接确认安装 |
-| 适用场景 | 给用户选择权 | 希望用户快速安装 |
 
 ### Manifest 配置选项
 
@@ -265,7 +220,7 @@ app.use(WebToDesktop, {
     description: '这是我的应用',   // 应用描述
     themeColor: '#4f46e5',        // 主题色
     backgroundColor: '#ffffff',   // 背景色
-    display: 'standalone',        // 显示模式: 'standalone' | 'fullscreen' | 'minimal-ui' | 'browser'
+    display: 'fullscreen',        // 显示模式: 'fullscreen' | 'standalone' | 'minimal-ui' | 'browser' (默认 fullscreen 全屏)
     orientation: 'any',           // 屏幕方向: 'any' | 'portrait' | 'landscape'
     startUrl: '/',                // 启动 URL
     scope: '/',                   // 作用域
