@@ -1,0 +1,41 @@
+{
+  "name": "vue-web-to-desktop",
+  "version": "1.0.0",
+  "description": "零配置的 Vue 插件，通过 PWA 技术将 Web 应用无缝转换为桌面应用",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "vue",
+    "pwa",
+    "desktop",
+    "web-to-desktop",
+    "progressive-web-app",
+    "vue2",
+    "vue3",
+    "install-prompt"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "peerDependencies": {
+    "vue": ">=2.6.0 || >=3.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.9.0"
+  }
+}

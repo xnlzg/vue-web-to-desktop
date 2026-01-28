@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4f46e5">
+  <title>vue-web-to-desktop 演示</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%234f46e5' width='100' height='100' rx='20'/><text y='.9em' font-size='90' x='50%' text-anchor='middle'>🖥️</text></svg>">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      padding: 20px;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .logo {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .feature {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .feature-title {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 32px;
+      background: white;
+      color: #4f46e5;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .status {
+      margin-top: 30px;
+      padding: 16px 24px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      font-size: 0.9rem;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+
+    .status-dot.warning {
+      background: #f59e0b;
+    }
+
+    .status-dot.error {
+      background: #ef4444;
+    }
+
+    footer {
+      margin-top: 40px;
+      opacity: 0.7;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <div class="logo">🖥️</div>
+      <h1>vue-web-to-desktop</h1>
+      <p>零配置的 Vue 插件，通过 PWA 技术将 Web 应用无缝转换为桌面应用。享受更快捷的访问体验！</p>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">🚀</div>
+          <div class="feature-title">零配置</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">Vue 2/3</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🌍</div>
+          <div class="feature-title">国际化</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🍎</div>
+          <div class="feature-title">iOS 支持</div>
+        </div>
+      </div>
+
+      <div class="mode-selector"
+        style="margin-bottom: 20px; padding: 16px; background: rgba(255,255,255,0.1); border-radius: 12px;">
+        <div style="margin-bottom: 10px; font-weight: 600;">安装模式：</div>
+        <label style="margin-right: 20px; cursor: pointer;">
+          <input type="radio" name="mode" value="prompt" checked style="margin-right: 6px;">
+          弹窗提示模式 (prompt)
+        </label>
+        <label style="cursor: pointer;">
+          <input type="radio" name="mode" value="auto" style="margin-right: 6px;">
+          自动安装模式 (auto)
+        </label>
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn" id="installBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          点击安装
+        </button>
+        <button class="btn" id="showPromptBtn" style="background: #10b981; color: white;">
+          📢 显示提示
+        </button>
+        <button class="btn" id="resetBtn" style="background: #f59e0b; color: white;">
+          🔄 重置状态
+        </button>
+      </div>
+
+      <div class="status">
+        <div class="status-item">
+          <span class="status-dot" id="pwaStatus"></span>
+          <span id="pwaText">检测 PWA 支持...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-dot" id="installStatus"></span>
+          <span id="installText">检测安装状态...</span>
+        </div>
+        <div class="status-item">
+          <span class="status-dot" id="modeStatus" style="background: #4f46e5;"></span>
+          <span id="modeText">当前模式: prompt (弹窗提示)</span>
+        </div>
+      </div>
+
+      <footer>
+        Made with ❤️ by vue-web-to-desktop
+      </footer>
+    </div>
+  </div>
+
+  <!-- 引入构建后的插件 -->
+  <script type="module">
+    import { WebToDesktop, platform, storage } from './dist/index.esm.js';
+
+    let wtd = null;
+    let currentMode = 'prompt';
+
+    // 更新状态显示
+    function updateStatus() {
+      const pwaStatus = document.getElementById('pwaStatus');
+      const pwaText = document.getElementById('pwaText');
+      const installStatus = document.getElementById('installStatus');
+      const installText = document.getElementById('installText');
+      const modeText = document.getElementById('modeText');
+
+      // PWA 支持状态
+      if (platform.supportsPWA()) {
+        pwaStatus.style.background = '#10b981';
+        pwaText.textContent = '✓ 浏览器支持 PWA';
+      } else {
+        pwaStatus.classList.add('warning');
+        pwaText.textContent = '⚠ 浏览器不完全支持 PWA';
+      }
+
+      // 安装状态
+      if (platform.isStandalone()) {
+        installStatus.style.background = '#10b981';
+        installText.textContent = '✓ 已在 PWA 模式运行';
+      } else if (storage.isInstalled()) {
+        installStatus.style.background = '#10b981';
+        installText.textContent = '✓ 应用已安装';
+      } else {
+        installStatus.style.background = '#f59e0b';
+        installText.textContent = '○ 尚未安装';
+      }
+
+      // 模式状态
+      modeText.textContent = currentMode === 'prompt'
+        ? '当前模式: prompt (弹窗提示)'
+        : '当前模式: auto (自动安装)';
+    }
+
+    // 初始化插件
+    function initPlugin(mode) {
+      // 如果已有实例，先销毁
+      if (wtd) {
+        wtd.destroy();
+      }
+
+      currentMode = mode;
+
+      wtd = new WebToDesktop({
+        delay: 2000,
+        themeColor: '#4f46e5',
+        debug: true,
+        installMode: mode,
+        autoInstallDelay: 1000,
+        onInstalled: () => {
+          console.log('🎉 安装成功！');
+          updateStatus();
+        },
+        onDismiss: () => {
+          console.log('😔 用户暂时不想安装');
+        }
+      });
+
+      wtd.init();
+      updateStatus();
+      console.log(`📌 插件已初始化，模式: ${mode}`);
+    }
+
+    // 初始化
+    initPlugin('prompt');
+
+    // 模式切换 - 需要刷新页面才能生效
+    document.querySelectorAll('input[name="mode"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        const mode = e.target.value;
+        console.log(`🔄 切换到 ${mode} 模式，刷新页面...`);
+        // 保存选择到 URL 参数
+        const url = new URL(window.location.href);
+        url.searchParams.set('mode', mode);
+        window.location.href = url.toString();
+      });
+    });
+
+    // 从 URL 参数读取模式
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlMode = urlParams.get('mode');
+    if (urlMode === 'auto') {
+      document.querySelector('input[value="auto"]').checked = true;
+      initPlugin('auto');
+    }
+
+    // 手动安装按钮 - 使用插件的 install 方法
+    document.getElementById('installBtn').addEventListener('click', async () => {
+      if (wtd.canInstall()) {
+        const result = await wtd.install();
+        if (result) {
+          updateStatus();
+        }
+      } else {
+        // 没有可用的安装事件，显示手动提示
+        wtd.showPromptManual();
+      }
+    });
+
+    // 显示提示按钮 - 手动显示右下角弹窗
+    document.getElementById('showPromptBtn').addEventListener('click', () => {
+      console.log('📢 手动显示提示弹窗');
+      wtd.showPromptManual();
+    });
+
+    // 重置状态按钮
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      wtd.resetDismissState();
+      updateStatus();
+      alert('状态已重置，刷新页面后可再次看到安装提示');
+    });
+
+    // 初始化状态
+    updateStatus();
+  </script>
+</body>
+
+</html>
